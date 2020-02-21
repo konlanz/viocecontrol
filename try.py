@@ -1,13 +1,17 @@
-from gpiozero import LED
+import RPi.GPIO as GPIO
 import sys
 
 # Import Adafruit IO MQTT client.
 from Adafruit_IO import MQTTClient
 
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(21, GPIO.OUT)
+GPIO.output(21, GPIO.LOW)
+
 ADAFRUIT_IO_KEY = 'aio_WMYl98LkSGH6B3hsDiixEjsKTALr'
 
 ADAFRUIT_IO_USERNAME = 'kodelan'
-led = LED(21)
+
 # Set to the ID of the feed to subscribe to for updates.
 FEED_ID = 'bulb'
 
@@ -31,9 +35,9 @@ def message(client, feed_id, payload):
 
     print('Feed {0} received new value: {1}'.format(feed_id, payload))
     if(payload == "1"):
-        led.on()
+        GPIO.output(21, GPIO.LOW)
     else:
-        led.off()
+        GPIO.output(21, GPIO.HIGH)
 
 
 # Create an MQTT client instance.
