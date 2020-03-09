@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartHome</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io();        
+         $(document).ready(function() {
+         // sending a connect request to the server.
+           window.addEventListener("load", function(){ //when page loads
+              var lightbox = document.getElementById("power"); 
+              lightbox.addEventListener("change", function() {
+              socket.emit('hello', Number(this.checked));
+          });
+                                                       
+        });
+           
+        window.addEventListener("load", function(){ //when page loads
+              var lightbox = document.getElementById("ledb"); 
+              lightbox.addEventListener("change", function() {
+              socket.emit('blueled', Number(this.checked));
+          });
+                                                       
+        });
+           
+        window.addEventListener("load", function(){ //when page loads
+              var lightbox = document.getElementById("ledy"); 
+              lightbox.addEventListener("change", function() {
+              socket.emit('yeled', Number(this.checked));
+          });
+                                                       
+        });
+         
+           // An event handler for a change of value 
+           $('input.sync').on('input', function(event) {
+               socket.emit('Slider value changed', {
+                   who: $(this).attr('id'),
+                   data: $(this).val()
+               });
+               return false;
+           });
+         
+           socket.on('after connect', function(msg) {
+               console.log('After connect', msg);
+           });
+           socket.on('timmer', function(msg) {
+               console.log('message sent', msg);
+               var dx = document.getElementById("timer");
+               dx.innerText = msg
+           });
+            socket.on('timmery', function(msg) {
+               console.log('message sent', msg);
+               var dx = document.getElementById("timery");
+               dx.innerText = msg
+           });
+           socket.on('timmerb', function(msg) {
+               console.log('message sent', msg);
+               var dx = document.getElementById("power").checked=msg;
+               
+           });
+           
+           socket.on('button', function(msg) {
+                console.log(msg)
+               document.getElementById("power").checked = msg;
+               console.log(document.getElementById("power").checked)
+           });
+           
+         });
+
+ </script>
+</head>
+<body>
+<nav class="navbar  shadow-lg p-3 mb-5 " >
+  <a class="navbar-brand"  href="#">Home</a>
+  <a class="navother" href="#">Logout</a>
+</nav>
+<div class="container-fluid">
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+      <img class="card-img-top" src="static/images/livingroom.jpg" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Living Room</h5>
+        <p class="card-text">Time On:<div class="timer" id = "timer"></div></p>
+           <form>
+        <label class="switch">
+          <input type="checkbox"  id = "power">
+          <span class="slider round"></span>
+        </label>
+        </form>
+      </div>
+    </div>
+    
+  </div>
+  <div class="col-md-4">
+      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+          <img class="card-img-top" src="static/images/masterbed.jpeg" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">Bed Room 1</h5>
+            <p class="card-text">Time On:<div class="timer" id = "timerb"></div></p>
+               <form>
+            <label class="switch">
+              <input type="checkbox"  id = "ledb">
+              <span class="slider round"></span>
+            </label>
+            </form>
+          </div>
+        </div>
+              
+  </div>
+  <div class="col-md-4">
+      <div class="card shadow-lg p-3 mb-5 bg-white rounde">
+          <img class="card-img-top" src="static/images/outdoor.jpg" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">Outdoor light</h5>
+            <p class="card-text">Time On:<div class="timer" id = "timery"></div></p>
+               <form>
+            <label class="switch">
+              <input type="checkbox"  id = "ledy">
+              <span class="slider round"></span>
+            </label>
+            </form>
+          </div>
+        </div>
+                
+  </div>
+
+</div>
+</div>
+</body>
+</html>
