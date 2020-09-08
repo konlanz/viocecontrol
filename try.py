@@ -34,7 +34,7 @@ def disconnected(client):
 def message(client, feed_id, payload):
 
     print('Feed {0} received new value: {1}'.format(feed_id, payload))
-    if(payload == "1"):
+    if(payload == "2"):
         GPIO.output(21, GPIO.LOW)
     else:
         GPIO.output(21, GPIO.HIGH)

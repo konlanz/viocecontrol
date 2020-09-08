@@ -78,20 +78,23 @@ def handle_abc():
     socketio.emit('timmer', str(timmerx))
     
 def message(client, feed_id, payload):
-    global start, stop 
-    global light_on
-    print('Feed {0} received new value: {1}'.format(feed_id, payload))
-    if(light_on):
-        GPIO.output(21, GPIO.LOW)
-        light_on = False
-        socketio.emit('timmerb', 0)
+	global start, stop 
+	global light_on
+	print('Feed {0} received new value: {1}'.format(feed_id, payload))
+	if(payload == "1"):
+
+		GPIO.output(21, GPIO.HIGH)
+		light_on = True
+		socketio.emit('timmerb', 1)
+		start = datetime.now()
             
-    else:
-        GPIO.output(21, GPIO.HIGH)
-        light_on = True
-        socketio.emit('timmerb', 1)
-        start = datetime.now()
-	
+	else:
+		GPIO.output(21, GPIO.LOW)
+		light_on = False
+		socketio.emit('timmerb', 0)
+	timmerx = stop-start
+	print(str(timmerx))
+	socketio.emit('timmer', str(timmerx))	
 	
 
 
